@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "elastalert.fullname" . }}
+  labels:
+    app: {{ template "elastalert.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "elastalert.name" . }}
+      release: {{ .Release.Name }}
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        name: {{ template "elastalert.fullname" . }}-elastalert
+        app: {{ template "elastalert.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ include "elastalert.serviceAccountName" . }}
+      containers:
+      - name: elastalert
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+          - name: config
+            mountPath: '/opt/elastalert/config.yaml'
+          - name: rules
+            mountPath: '/opt/elastalert/rules'
+      restartPolicy: Always
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+{{- end }}
+      volumes:
+        - name: rules
+{{- if .Values.rulesDir }}
+          hostPath:
+            path: {{ .Values.rulesDir }}
+{{- end }}
+        - name: config
+{{- if .Values.configFile }}
+          hostPath:
+            path: {{ .Values.configFile }}
+{{- end }}

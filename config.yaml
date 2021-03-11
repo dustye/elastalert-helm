@@ -1,0 +1,14 @@
+rules_folder: /opt/elastalert/rules
+run_every:
+  minutes: 1
+buffer_time:
+  minutes: 15
+es_host: <aws host address>
+es_port: 443
+aws_region: <es aws region>
+use_ssl: True
+es_username: <es usern>
+es_password: <es passw>
+writeback_index: <elastalert>
+alert_time_limit:
+  days: 2

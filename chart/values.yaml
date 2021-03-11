@@ -1,0 +1,62 @@
+# number of replicas to run
+replicaCount: 1
+
+# number of helm release revisions to retain
+revisionHistoryLimit: 5
+
+# Default internal between alert checks against the elasticsearch datasource, in minutes
+runIntervalMins: 1
+
+# Default rule buffer duration, in minutes
+bufferTimeMins: 15
+
+#The maximum time between queries for ElastAlert to start at the most recently run query. The default is one week.
+oldQueryLimitMins: 10080
+
+# Amount of time to retry and deliver failed alerts (1440 minutes per day)
+alertRetryLimitMins: 2880
+
+# Default time before realerting, in minutes
+realertIntervalMins: ""
+
+# For ES 5: The name of the index which stores elastalert's statuses, typically elastalert_status
+# For ES 6: The prefix of the names of indices which store elastalert's statuses, typicaly elastalert
+#
+# See https://github.com/Yelp/elastalert/commit/c250100b7be07c68a53789569a86f87193ec37f4 for more details about this differentiation.
+#
+writebackIndex: elastalert
+
+image:
+  # docker image
+  repository: elastalert
+  # docker image tag
+  tag: latest
+  pullPolicy: IfNotPresent
+
+rulesDir: "<abs path rules>"
+configFile: "<abs path config file>.yaml"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  name: "elastalert"
+
+# Enable pod security policy
+# https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+podSecurityPolicy:
+  create: false
+
+# Support using node selectors and tolerations
+# nodeSelector:
+#   "node-role.kubernetes.io/infra_worker": "true"
+nodeSelector: {}
+
+# Specify node affinity or anti-affinity specifications
+affinity: {}
+
+# tolerations:
+#   - key: "node_role"
+#     operator: "Equal"
+#     value: "infra_worker"
+#     effect: "NoSchedule"
+tolerations: []

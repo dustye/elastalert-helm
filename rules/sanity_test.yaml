@@ -1,0 +1,10 @@
+name: Sanity Test
+type: any
+index: logstash-*
+timestamp_field: "@timestamp"
+timestamp_type: unix
+filter:
+- query_string:
+    query: "*"
+alert:
+- debug
