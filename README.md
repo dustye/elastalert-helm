@@ -1,3 +1,8 @@
+This is a modified version https://github.com/jertel/elastalert-docker where I've made some changes to allow for persistent volume claims to mount the rules directory and config file. Some of the values below aren't in the values.yaml - I just haven't modified the README...
+
+The reason I've added the persistent volume claims is due to the large volume of rules needed/used with a security use-case (100s). It helps keep the container smaller and allows for modifying rules without constant restarts (hopefully). You should have no expectation this will be maintained or updated here, but feel free to submit pull requests (who knows, I might take a look at them).
+
+############################
 
 # Helm Chart for Kubernetes
 
